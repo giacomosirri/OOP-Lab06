@@ -1,6 +1,7 @@
 package it.unibo.oop.lab.collections1;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,10 @@ import java.util.List;
 public final class UseCollection {
 
     private static final int TO_MS = 1_000_000;
-
+    private static final int FIRST_INDEX = 0;
+    private static final int ADD_CONST = 100_000;
+    private static final int READ_CONST = 1_000;
+    
     private UseCollection() {
     }
 
@@ -25,7 +29,7 @@ public final class UseCollection {
          * 1) Create a new ArrayList<Integer>, and populate it with the numbers
          * from 1000 (included) to 2000 (excluded).
          */
-    	ArrayList<Integer> arrayList = new ArrayList<>();
+    	List<Integer> arrayList = new ArrayList<>();
     	for (int i = 1000; i < 2000; i++) {
     		arrayList.add(i);
     	}
@@ -35,17 +39,16 @@ public final class UseCollection {
          * without using any looping construct (for, while), populate it with
          * the same contents of the list of point 1.
          */
-    	LinkedList<Integer> linkedList = new LinkedList<>();
-    	linkedList.addAll(arrayList);
+    	List<Integer> linkedList = new LinkedList<>(arrayList);
     	
         /*
          * 3) Using "set" and "get" and "size" methods, swap the first and last
          * element of the first list. You can not use any "magic number".
          * (Suggestion: use a temporary variable)
          */
-    	var temp = arrayList.get(arrayList.size() - 1);
-    	arrayList.set(arrayList.size() - 1, arrayList.get(0));
-    	arrayList.set(0, temp);
+    	var temp = arrayList.get(lastIndex(arrayList));
+    	arrayList.set(lastIndex(arrayList), arrayList.get(FIRST_INDEX));
+    	arrayList.set(FIRST_INDEX, temp);
     	
         /*
          * 4) Using a single for-each, print the contents of the arraylist.
@@ -62,10 +65,10 @@ public final class UseCollection {
          * TestPerformance.java.
          */
     	long arrayListTimeAdding = computeTimeAdding(arrayList);
-    	System.out.println("The insertion of 100,000 new elements in the head of an arrayList took " + 
+    	System.out.println("The insertion of " + ADD_CONST + " new elements in the head of an array list took " + 
     						 arrayListTimeAdding + "ns or " + arrayListTimeAdding / TO_MS + "ms");
     	long linkedListTimeAdding = computeTimeAdding(linkedList);
-    	System.out.println("The insertion of 100,000 new elements in the head of a linkedList took " + 
+    	System.out.println("The insertion of " + ADD_CONST + " new elements in the head of a linked list took " + 
     						 linkedListTimeAdding + "ns or " + linkedListTimeAdding / TO_MS + "ms");
     	double ratioAdding = arrayListTimeAdding/linkedListTimeAdding;
     	System.out.println("An array list is " + (ratioAdding > 1 ? ratioAdding : 1 / ratioAdding) + 
@@ -79,10 +82,10 @@ public final class UseCollection {
          * times, use as example TestPerformance.java.
          */
     	long arrayListTimeReading = computeTimeReading(arrayList);
-    	System.out.println("The reading of 1,000 elements in the middle of an arrayList took " + 
+    	System.out.println("The reading of " + READ_CONST + " elements in the middle of an array list took " + 
     						 arrayListTimeReading + "ns or " + arrayListTimeReading / TO_MS + "ms");
     	long linkedListTimeReading = computeTimeReading(linkedList);
-    	System.out.println("The reading of 1,000 elements in the middle of a linkedList took " + 
+    	System.out.println("The reading of " + READ_CONST + " elements in the middle of a linked list took " + 
     						 linkedListTimeReading + "ns or " + linkedListTimeReading / TO_MS + "ms");
     	double ratioReading = arrayListTimeReading/linkedListTimeReading;
     	System.out.println("An array list is " + (ratioReading > 1 ? ratioReading : 1 / ratioReading) 
@@ -130,9 +133,13 @@ public final class UseCollection {
     	
     }
     
+    private static int lastIndex(List<Integer> l) {
+    	return l.size() - 1; 
+    }
+    
     private static long computeTimeAdding(List<Integer> l) {
     	long time = System.nanoTime();
-    	for (int i = 0; i < 100_000; i++) {
+    	for (int i = 0; i < ADD_CONST; i++) {
     		l.add(0, i);
     	}
     	return System.nanoTime() - time;
@@ -140,7 +147,7 @@ public final class UseCollection {
     
     private static long computeTimeReading(List<Integer> l) {
     	long time = System.nanoTime();
-    	for (int i = 0; i < 1000; i++) {
+    	for (int i = 0; i < READ_CONST; i++) {
     		l.get(l.size()/2);
     	}
     	return System.nanoTime() - time;
