@@ -2,6 +2,7 @@ package it.unibo.oop.lab.collections1;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Example class using {@link java.util.List} and {@link java.util.Map}.
@@ -59,20 +60,15 @@ public final class UseCollection {
          * using the previous lists. In order to measure times, use as example
          * TestPerformance.java.
          */
-    	long timeArrayList = System.nanoTime();
-    	for (int i = 0; i < 100_000; i++) {
-    		arrayList.add(0, i);
-    	}
-    	timeArrayList = System.nanoTime() - timeArrayList;
+    	long arrayListTime = computeTime(arrayList);
     	System.out.println("The insertion of 100,000 new elements in the head of an arrayList took " + 
-    						 timeArrayList + "ns or " + timeArrayList / TO_MS + "ms");
-    	long timeLinkedList = System.nanoTime();
-    	for (int i = 0; i < 10000; i++) {
-    		linkedList.add(0, i);
-    	}
-    	timeLinkedList = System.nanoTime() - timeLinkedList;
+    						 arrayListTime + "ns or " + arrayListTime / TO_MS + "ms");
+    	long linkedListTime = computeTime(linkedList);
     	System.out.println("The insertion of 100,000 new elements in the head of a linkedList took " + 
-				 timeLinkedList + "ns or " + timeLinkedList / TO_MS + "ms");
+    						 linkedListTime + "ns or " + linkedListTime / TO_MS + "ms");
+    	double ratio = arrayListTime/linkedListTime;
+    	System.out.println("An array list is " + ratio + " times" + (ratio > 1 ? " slower " : " faster ") +
+    						"than a linked list to add an element in the head of the list");
         /*
          * 6) Measure the performance of reading 1000 times an element whose
          * position is in the middle of the collection for both ArrayList and
@@ -98,5 +94,13 @@ public final class UseCollection {
         /*
          * 8) Compute the population of the world
          */
+    }
+    
+    private static long computeTime(List<Integer> l) {
+    	long time = System.nanoTime();
+    	for (int i = 0; i < 100_000; i++) {
+    		l.add(0, i);
+    	}
+    	return System.nanoTime() - time;
     }
 }
