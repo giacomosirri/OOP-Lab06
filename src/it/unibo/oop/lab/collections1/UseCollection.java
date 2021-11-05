@@ -29,7 +29,7 @@ public final class UseCollection {
          * 1) Create a new ArrayList<Integer>, and populate it with the numbers
          * from 1000 (included) to 2000 (excluded).
          */
-    	List<Integer> arrayList = new ArrayList<>();
+    	final List<Integer> arrayList = new ArrayList<>();
     	for (int i = 1000; i < 2000; i++) {
     		arrayList.add(i);
     	}
@@ -39,21 +39,21 @@ public final class UseCollection {
          * without using any looping construct (for, while), populate it with
          * the same contents of the list of point 1.
          */
-    	List<Integer> linkedList = new LinkedList<>(arrayList);
+    	final List<Integer> linkedList = new LinkedList<>(arrayList);
     	
         /*
          * 3) Using "set" and "get" and "size" methods, swap the first and last
          * element of the first list. You can not use any "magic number".
          * (Suggestion: use a temporary variable)
          */
-    	var temp = arrayList.get(lastIndex(arrayList));
+    	final var temp = arrayList.get(lastIndex(arrayList));
     	arrayList.set(lastIndex(arrayList), arrayList.get(FIRST_INDEX));
     	arrayList.set(FIRST_INDEX, temp);
     	
         /*
          * 4) Using a single for-each, print the contents of the arraylist.
          */
-    	for (Integer i : arrayList) {
+    	for (final Integer i : arrayList) {
     		System.out.println(i);
     	}
     	
@@ -64,13 +64,13 @@ public final class UseCollection {
          * using the previous lists. In order to measure times, use as example
          * TestPerformance.java.
          */
-    	long arrayListTimeAdding = computeTimeAdding(arrayList);
+    	final long arrayListTimeAdding = computeTimeAdding(arrayList);
     	System.out.println("The insertion of " + ADD_CONST + " new elements in the head of an array list took " + 
     						 arrayListTimeAdding + "ns or " + arrayListTimeAdding / TO_MS + "ms");
-    	long linkedListTimeAdding = computeTimeAdding(linkedList);
+    	final long linkedListTimeAdding = computeTimeAdding(linkedList);
     	System.out.println("The insertion of " + ADD_CONST + " new elements in the head of a linked list took " + 
     						 linkedListTimeAdding + "ns or " + linkedListTimeAdding / TO_MS + "ms");
-    	double ratioAdding = arrayListTimeAdding/linkedListTimeAdding;
+    	final double ratioAdding = arrayListTimeAdding/linkedListTimeAdding;
     	System.out.println("An array list is " + (ratioAdding > 1 ? ratioAdding : 1 / ratioAdding) + 
     						" times" + (ratioAdding > 1 ? " slower " : " faster ") +
     						"than a linked list to add an element in the head of the list");
@@ -81,13 +81,13 @@ public final class UseCollection {
          * LinkedList, using the collections of point 5. In order to measure
          * times, use as example TestPerformance.java.
          */
-    	long arrayListTimeReading = computeTimeReading(arrayList);
+    	final long arrayListTimeReading = computeTimeReading(arrayList);
     	System.out.println("The reading of " + READ_CONST + " elements in the middle of an array list took " + 
     						 arrayListTimeReading + "ns or " + arrayListTimeReading / TO_MS + "ms");
-    	long linkedListTimeReading = computeTimeReading(linkedList);
+    	final long linkedListTimeReading = computeTimeReading(linkedList);
     	System.out.println("The reading of " + READ_CONST + " elements in the middle of a linked list took " + 
     						 linkedListTimeReading + "ns or " + linkedListTimeReading / TO_MS + "ms");
-    	double ratioReading = arrayListTimeReading/linkedListTimeReading;
+    	final double ratioReading = arrayListTimeReading/linkedListTimeReading;
     	System.out.println("An array list is " + (ratioReading > 1 ? ratioReading : 1 / ratioReading) 
     						 + " times" + (ratioReading > 1 ? " slower " : " faster ") +
     						 "than a linked list to read an element in the middle of the list");
@@ -108,7 +108,7 @@ public final class UseCollection {
          * 
          * Oceania -> 38,304,000
          */
-    	var continents = new HashMap<String, Long>();
+    	final var continents = new HashMap<String, Long>();
     	continents.put("Africa", 1_110_635_000L);
     	continents.put("Americas", 972_005_000L);
     	continents.put("Antarctica", 0L);
@@ -116,7 +116,7 @@ public final class UseCollection {
     	continents.put("Europe", 742_452_000L);
     	continents.put("Oceania", 38_304_000L);
     	// print for checking
-    	var it = continents.entrySet().iterator();
+    	final var it = continents.entrySet().iterator();
     	while (it.hasNext()) {
     		System.out.println(it.next());
     	}
@@ -138,7 +138,7 @@ public final class UseCollection {
     }
     
     private static long computeTimeAdding(List<Integer> l) {
-    	long time = System.nanoTime();
+    	final long time = System.nanoTime();
     	for (int i = 0; i < ADD_CONST; i++) {
     		l.add(0, i);
     	}
@@ -146,7 +146,7 @@ public final class UseCollection {
     }
     
     private static long computeTimeReading(List<Integer> l) {
-    	long time = System.nanoTime();
+    	final long time = System.nanoTime();
     	for (int i = 0; i < READ_CONST; i++) {
     		l.get(l.size()/2);
     	}

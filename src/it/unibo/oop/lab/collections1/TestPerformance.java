@@ -12,7 +12,8 @@ public final class TestPerformance {
     private static final int ELEMS = 1_000_000;
     private static final int TO_MS = 1_000_000;
 
-    private TestPerformance() { }
+    private TestPerformance() {
+    }
 
     /**
      * @param s
@@ -40,6 +41,6 @@ public final class TestPerformance {
         System.out.println("Converting " + ELEMS
                 + " int to String and inserting them in a Set took " + time
                 + "ns (" + time / TO_MS + "ms)");
-        System.out.println(set);
+        //System.out.println(set);
     }
 }
