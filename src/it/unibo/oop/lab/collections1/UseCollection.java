@@ -1,6 +1,7 @@
 package it.unibo.oop.lab.collections1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,21 +61,34 @@ public final class UseCollection {
          * using the previous lists. In order to measure times, use as example
          * TestPerformance.java.
          */
-    	long arrayListTime = computeTime(arrayList);
+    	long arrayListTimeAdding = computeTimeAdding(arrayList);
     	System.out.println("The insertion of 100,000 new elements in the head of an arrayList took " + 
-    						 arrayListTime + "ns or " + arrayListTime / TO_MS + "ms");
-    	long linkedListTime = computeTime(linkedList);
+    						 arrayListTimeAdding + "ns or " + arrayListTimeAdding / TO_MS + "ms");
+    	long linkedListTimeAdding = computeTimeAdding(linkedList);
     	System.out.println("The insertion of 100,000 new elements in the head of a linkedList took " + 
-    						 linkedListTime + "ns or " + linkedListTime / TO_MS + "ms");
-    	double ratio = arrayListTime/linkedListTime;
-    	System.out.println("An array list is " + ratio + " times" + (ratio > 1 ? " slower " : " faster ") +
+    						 linkedListTimeAdding + "ns or " + linkedListTimeAdding / TO_MS + "ms");
+    	double ratioAdding = arrayListTimeAdding/linkedListTimeAdding;
+    	System.out.println("An array list is " + (ratioAdding > 1 ? ratioAdding : 1 / ratioAdding) + 
+    						" times" + (ratioAdding > 1 ? " slower " : " faster ") +
     						"than a linked list to add an element in the head of the list");
+    	
         /*
          * 6) Measure the performance of reading 1000 times an element whose
          * position is in the middle of the collection for both ArrayList and
          * LinkedList, using the collections of point 5. In order to measure
          * times, use as example TestPerformance.java.
          */
+    	long arrayListTimeReading = computeTimeReading(arrayList);
+    	System.out.println("The reading of 1,000 elements in the middle of an arrayList took " + 
+    						 arrayListTimeReading + "ns or " + arrayListTimeReading / TO_MS + "ms");
+    	long linkedListTimeReading = computeTimeReading(linkedList);
+    	System.out.println("The reading of 1,000 elements in the middle of a linkedList took " + 
+    						 linkedListTimeReading + "ns or " + linkedListTimeReading / TO_MS + "ms");
+    	double ratioReading = arrayListTimeReading/linkedListTimeReading;
+    	System.out.println("An array list is " + (ratioReading > 1 ? ratioReading : 1 / ratioReading) 
+    						 + " times" + (ratioReading > 1 ? " slower " : " faster ") +
+    						 "than a linked list to read an element in the middle of the list");
+    	
         /*
          * 7) Build a new Map that associates to each continent's name its
          * population:
@@ -91,15 +105,43 @@ public final class UseCollection {
          * 
          * Oceania -> 38,304,000
          */
+    	var continents = new HashMap<String, Long>();
+    	continents.put("Africa", 1_110_635_000L);
+    	continents.put("Americas", 972_005_000L);
+    	continents.put("Antarctica", 0L);
+    	continents.put("Asia", 4_298_723_000L);
+    	continents.put("Europe", 742_452_000L);
+    	continents.put("Oceania", 38_304_000L);
+    	// print for checking
+    	var it = continents.entrySet().iterator();
+    	while (it.hasNext()) {
+    		System.out.println(it.next());
+    	}
+    	
         /*
          * 8) Compute the population of the world
          */
+    	var iterator = continents.entrySet().iterator();
+    	long worldPopulation = 0;
+    	while (iterator.hasNext()) {
+    		worldPopulation += iterator.next().getValue();
+    	}
+    	System.out.println("World population is " + worldPopulation + " people");
+    	
     }
     
-    private static long computeTime(List<Integer> l) {
+    private static long computeTimeAdding(List<Integer> l) {
     	long time = System.nanoTime();
     	for (int i = 0; i < 100_000; i++) {
     		l.add(0, i);
+    	}
+    	return System.nanoTime() - time;
+    }
+    
+    private static long computeTimeReading(List<Integer> l) {
+    	long time = System.nanoTime();
+    	for (int i = 0; i < 1000; i++) {
+    		l.get(l.size()/2);
     	}
     	return System.nanoTime() - time;
     }
