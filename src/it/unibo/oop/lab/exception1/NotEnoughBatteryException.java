@@ -23,7 +23,6 @@ public class NotEnoughBatteryException extends IllegalStateException {
 		super();
 		this.battery = battery;
 	}
-
 	
     /**
      * 
