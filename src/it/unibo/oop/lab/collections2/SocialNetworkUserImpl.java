@@ -96,7 +96,13 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
         var groups = this.following.entrySet();
         var iterator = groups.iterator();
         while (iterator.hasNext()) {
-        	list.addAll(iterator.next().getValue());
+        	var currentGroup = iterator.next().getValue();
+        	for (var currentGroupUser : currentGroup) {
+            	// every person must only be counted once, even if he/she is in multiple groups
+        		if (!list.contains(currentGroupUser)) {
+        			list.add(currentGroupUser);
+        		}
+        	}
         }
         return list;
     }
