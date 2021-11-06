@@ -28,7 +28,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * think of what type of keys and values would best suit the requirements
      */
 	
-	private final Map<String, Set<U>> following;
+	private final Map<String, Set<U>> followedMap;
 
     /*
      * [CONSTRUCTORS]
@@ -56,7 +56,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
         super(name, surname, user, userAge);
-        this.following = new HashMap<String, Set<U>>();
+        this.followedMap = new HashMap<String, Set<U>>();
     }
 
     public SocialNetworkUserImpl(final String name, final String surname, final String user) {
@@ -71,11 +71,12 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
 
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
-    	if (!this.following.containsKey(circle)) {
-    		this.following.put(circle, new HashSet<U>());
+    	if (!this.followedMap.containsKey(circle)) {
+    		this.followedMap.put(circle, new HashSet<U>());
     	}
-    	if (!this.following.get(circle).contains(user)) {
-            this.following.get(circle).add(user);
+    	// add the person only if he/she is not already followed
+    	if (!this.followedMap.get(circle).contains(user)) {
+            this.followedMap.get(circle).add(user);
     		return true;
     	}
         return false;
@@ -84,8 +85,8 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
     	var coll = new HashSet<U>();
-    	if (this.following.containsKey(groupName)) {
-    		coll.addAll(this.following.get(groupName));
+    	if (this.followedMap.containsKey(groupName)) {
+    		coll.addAll(this.followedMap.get(groupName));
         }
         return coll;
     }
@@ -93,7 +94,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
     @Override
     public List<U> getFollowedUsers() {
         var list = new LinkedList<U>();
-        var groups = this.following.entrySet();
+        var groups = this.followedMap.entrySet();
         var iterator = groups.iterator();
         while (iterator.hasNext()) {
         	var currentGroup = iterator.next().getValue();

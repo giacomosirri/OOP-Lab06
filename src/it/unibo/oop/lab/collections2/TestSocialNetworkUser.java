@@ -61,6 +61,7 @@ public final class TestSocialNetworkUser {
         dwashington.addFollowedUser(WRITERS, ntaleb);
         dwashington.addFollowedUser("colleagues", kbacon);
         dwashington.addFollowedUser(WRITERS, mgladwell);
+
         /*
          * All tests must return true
          */
@@ -71,10 +72,12 @@ public final class TestSocialNetworkUser {
         System.out.println("M Gladwell has not set yet any group called \"Close friends\": " + mgladFriends.isEmpty());
         final Collection<User> dwashFriends = dwashington.getFollowedUsersInGroup(WRITERS);
         System.out.println("Denzel has 2 followed people in group \"writers\": " + (dwashFriends.size() == 2));
+        
         /*
          * Adding another friend to Denzel's "writers" group...
          */
         dwashFriends.add(asmith);
+        
         /*
          * The above operation *MUST* have no effect on Denzel's profile itself:
          * STILL TWO PEOPLE in denzel's group called writers
