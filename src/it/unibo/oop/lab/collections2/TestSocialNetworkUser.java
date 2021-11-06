@@ -81,6 +81,5 @@ public final class TestSocialNetworkUser {
          */
         System.out.println("Denzel has STILL 2 followed people in group \"writers\": "
                 + (dwashington.getFollowedUsersInGroup(WRITERS).size() == 2));
-        
     }
 }

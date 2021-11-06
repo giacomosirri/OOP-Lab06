@@ -83,15 +83,22 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
 
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        if (this.following.containsKey(groupName)) {
-        	return new HashSet<U>(this.following.get(groupName));
+    	var coll = new HashSet<U>();
+    	if (this.following.containsKey(groupName)) {
+    		coll.addAll(this.following.get(groupName));
         }
-        return null;
+        return coll;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        var list = new LinkedList<U>();
+        var groups = this.following.entrySet();
+        var iterator = groups.iterator();
+        while (iterator.hasNext()) {
+        	list.addAll(iterator.next().getValue());
+        }
+        return list;
     }
 
 }
