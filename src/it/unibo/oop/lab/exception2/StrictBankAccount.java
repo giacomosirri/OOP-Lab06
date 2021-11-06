@@ -60,7 +60,6 @@ public class StrictBankAccount implements BankAccount {
     public void depositFromATM(final int usrID, final double amount) {
         if (this.totalTransactionCount < this.maximumAllowedATMTransactions) {
             this.deposit(usrID, amount - StrictBankAccount.ATM_TRANSACTION_FEE);
-            increaseTransactionsCount();
         }
     }
 
