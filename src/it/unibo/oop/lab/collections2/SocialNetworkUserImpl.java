@@ -74,7 +74,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
     	if (!this.following.containsKey(circle)) {
     		this.following.put(circle, new HashSet<U>());
     	}
-    	if (!this.following.containsValue(user)) {
+    	if (!this.following.get(circle).contains(user)) {
             this.following.get(circle).add(user);
     		return true;
     	}
@@ -83,6 +83,9 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
 
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
+        if (this.following.containsKey(groupName)) {
+        	return new HashSet<U>(this.following.get(groupName));
+        }
         return null;
     }
 
