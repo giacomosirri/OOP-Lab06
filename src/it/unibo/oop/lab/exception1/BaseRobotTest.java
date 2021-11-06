@@ -25,6 +25,7 @@ public final class BaseRobotTest {
          * FIRST OF ALL, take a look to "TestWithExceptions". Read the source and the
          * comments very carefully.
          */
+    	
         /*
          *  1) Create a Robot with battery level 100
          */
@@ -32,12 +33,13 @@ public final class BaseRobotTest {
         // checking if robot is in position x=0; y=0
         assertEquals("[CHECKING ROBOT INIT POS X]", 0, r1.getEnvironment().getCurrPosX());
         assertEquals("[CHECKING ROBOT INIT POS Y]", 0, r1.getEnvironment().getCurrPosY());
+        
         /*
          * 2) Move the robot right until it touches the world limit
          */
         for (int i = 0; i < RobotEnvironment.WORLD_X_UPPER_LIMIT; i++) {
             // check if position is coherent
-            assertTrue("[CHECKING MOVING RIGHT]", r1.getEnvironment().getCurrPosX() + 1, r1.moveRight());
+            assertTrue("[CHECKING MOVING RIGHT]", r1.moveRight());
         }
         // reached the right limit of the world
         try {
@@ -88,6 +90,12 @@ public final class BaseRobotTest {
         // expected, actual, delta (accepted error as we deal with decimal
         // values: in this case we accept NO ERROR, which is generally bad)
         assertEquals(0d, r2.getBatteryLevel(), 0);
+        try {
+        	r2.moveUp();
+        	fail();
+        } catch (NotEnoughBatteryException e) {
+        	assertNotNull(e.getMessage());
+        }
         // verify position: same as start position
         assertEquals("[CHECKING ROBOT INIT POS Y]", 0, r2.getEnvironment().getCurrPosY());
         // out of world: returns false

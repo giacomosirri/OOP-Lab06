@@ -79,7 +79,7 @@ public class Robot {
      * 
      * @return A boolean indicating if the Right movement has been performed
      */
-    public void moveRight() {
+    public boolean moveRight() {
         try {
         	this.moveToPosition(this.environment.getCurrPosX() + Robot.MOVEMENT_DELTA,
                 this.environment.getCurrPosY());
