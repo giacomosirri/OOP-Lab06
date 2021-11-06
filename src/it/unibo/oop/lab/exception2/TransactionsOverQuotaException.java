@@ -13,7 +13,8 @@ public class TransactionsOverQuotaException extends IllegalStateException {
 	}
 	
 	public String toString() {
-		return this.transactions + "are too many, you cannot perform so many transactions!";
+		return (this.transactions + 1) + " operations are too many, you are allowed to perform only " 
+				+ this.transactions + " operations!";
 	}
 	
 	public String getMessage() {
