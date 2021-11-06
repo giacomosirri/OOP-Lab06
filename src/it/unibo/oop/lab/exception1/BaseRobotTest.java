@@ -37,7 +37,7 @@ public final class BaseRobotTest {
          */
         for (int i = 0; i < RobotEnvironment.WORLD_X_UPPER_LIMIT; i++) {
             // check if position is coherent
-            assertTrue("[CHECKING MOVING RIGHT]", r1.moveRight());
+            assertTrue("[CHECKING MOVING RIGHT]", r1.getEnvironment().getCurrPosX() + 1, r1.moveRight());
         }
         // reached the right limit of the world
         try {
