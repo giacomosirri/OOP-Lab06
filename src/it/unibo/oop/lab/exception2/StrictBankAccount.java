@@ -2,8 +2,8 @@ package it.unibo.oop.lab.exception2;
 
 /**
  * Class modeling a BankAccount with strict policies: getting money is allowed
- * only with enough founds, and there are also a limited number of free ATM
- * transaction (this number is provided as a input in the constructor).
+ * only with enough founds and there are also a limited number of free ATM
+ * transaction (this number is provided as an input in the constructor).
  * 
  */
 public class StrictBankAccount implements BankAccount {
@@ -58,7 +58,7 @@ public class StrictBankAccount implements BankAccount {
      * {@inheritDoc}
      */
     public void depositFromATM(final int usrID, final double amount) {
-        if (totalTransactionCount < maximumAllowedATMTransactions) {
+        if (this.totalTransactionCount < this.maximumAllowedATMTransactions) {
             this.deposit(usrID, amount - StrictBankAccount.ATM_TRANSACTION_FEE);
             increaseTransactionsCount();
         }
@@ -69,7 +69,7 @@ public class StrictBankAccount implements BankAccount {
      * {@inheritDoc}
      */
     public void withdrawFromATM(final int usrID, final double amount) {
-        if (totalTransactionCount < maximumAllowedATMTransactions) {
+        if (this.totalTransactionCount < this.maximumAllowedATMTransactions) {
             this.withdraw(usrID, amount + StrictBankAccount.ATM_TRANSACTION_FEE);
         }
     }
@@ -87,7 +87,7 @@ public class StrictBankAccount implements BankAccount {
      * {@inheritDoc}
      */
     public int getTransactionCount() {
-        return totalTransactionCount;
+        return this.totalTransactionCount;
     }
 
     /**
@@ -96,10 +96,10 @@ public class StrictBankAccount implements BankAccount {
      *            id of the user related to these fees
      */
     public void computeManagementFees(final int usrID) {
-        final double feeAmount = MANAGEMENT_FEE + (totalTransactionCount * StrictBankAccount.TRANSACTION_FEE);
+        final double feeAmount = MANAGEMENT_FEE + (this.totalTransactionCount * StrictBankAccount.TRANSACTION_FEE);
         if (checkUser(usrID) && isWithdrawAllowed(feeAmount)) {
-            balance -= MANAGEMENT_FEE + totalTransactionCount * StrictBankAccount.TRANSACTION_FEE;
-            totalTransactionCount = 0;
+            this.balance -= MANAGEMENT_FEE + this.totalTransactionCount * StrictBankAccount.TRANSACTION_FEE;
+            this.totalTransactionCount = 0;
         }
     }
 
@@ -108,10 +108,10 @@ public class StrictBankAccount implements BankAccount {
     }
 
     private boolean isWithdrawAllowed(final double amount) {
-        return balance > amount;
+        return this.balance > amount;
     }
 
     private void increaseTransactionsCount() {
-        totalTransactionCount++;
+        this.totalTransactionCount++;
     }
 }
