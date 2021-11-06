@@ -7,6 +7,9 @@ public class GraphImpl<N> implements Graph<N> {
 	private final Map<N, Set<N>> adjacencyMatrix = new HashMap<>();
 	private boolean direct = false;
 	
+	public GraphImpl() {
+	}
+	
 	public GraphImpl(final boolean direct) {
 		this.direct = direct;
 	}
@@ -18,17 +21,11 @@ public class GraphImpl<N> implements Graph<N> {
 		}
 	}
 
-	private void setTargetNode(N source, N target) {
-		Set<N> newSetValues = this.adjacencyMatrix.get(source);
-		newSetValues.add(target);
-		this.adjacencyMatrix.put(source, newSetValues);
-	}
-		
 	public void addEdge(N source, N target) {
 		if (source != null & target != null) {
-			this.setTargetNode(source, target);
+			this.adjacencyMatrix.get(source).add(target);
 			if (this.direct == false) {
-				this.setTargetNode(target, source);
+				this.adjacencyMatrix.get(target).add(source);
 			}
 		}
 	}
