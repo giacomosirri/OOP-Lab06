@@ -1,4 +1,4 @@
-package it.unibo.oop.lab.exception1;
+package it.unibo.oop.lab.exception2;
 
 public class NotEnoughFoundsException extends IllegalStateException {
 
@@ -8,7 +8,7 @@ public class NotEnoughFoundsException extends IllegalStateException {
 	private static final long serialVersionUID = 1018751054348870270L;
 	private final double founds;
 	
-	public NotEnoughFoundsException(double founds) {
+	public NotEnoughFoundsException(final double founds) {
 		this.founds = founds;
 	}
 	
@@ -19,6 +19,5 @@ public class NotEnoughFoundsException extends IllegalStateException {
 	public String getMessage() {
 		return this.toString();
 	}
-
 	
 }
