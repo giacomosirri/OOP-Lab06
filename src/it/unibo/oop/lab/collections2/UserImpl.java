@@ -3,7 +3,7 @@ package it.unibo.oop.lab.collections2;
 /**
  * This is a basic implementation of a {@link it.unibo.oop.lab.collections2.User}.
  * 
- * This class is completely mplemented and can be used as it is.
+ * This class is completely implemented and can be used as it is.
  * 
  */
 public class UserImpl implements User {
@@ -22,9 +22,9 @@ public class UserImpl implements User {
      * going to have a value equal to -1.
      * 
      * @param name
-     *            the user firstname
+     *            the user first name
      * @param surname
-     *            the user lastname
+     *            the user last name
      * @param user
      *            alias of the user, i.e. the way a user is identified on an
      *            application
@@ -37,9 +37,9 @@ public class UserImpl implements User {
      * Builds a new UserImpl.
      * 
      * @param name
-     *            the user firstname
+     *            the user first name
      * @param surname
-     *            the user lastname
+     *            the user last name
      * @param userAge
      *            user's age
      * @param user

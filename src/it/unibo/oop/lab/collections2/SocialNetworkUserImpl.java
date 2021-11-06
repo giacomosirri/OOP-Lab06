@@ -1,7 +1,6 @@
 package it.unibo.oop.lab.collections2;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * 
@@ -19,7 +18,6 @@ import java.util.List;
 public class SocialNetworkUserImpl<U extends User> extends UserImpl implements SocialNetworkUser<U> {
 
     /*
-     * 
      * [FIELDS]
      * 
      * Define any necessary field
@@ -29,6 +27,8 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * 
      * think of what type of keys and values would best suit the requirements
      */
+	
+	private final Map<String, Set<U>> following;
 
     /*
      * [CONSTRUCTORS]
@@ -36,18 +36,18 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * 1) Complete the definition of the constructor below, for building a user
      * participating in a social network, with 4 parameters, initializing:
      * 
-     * - firstName - lastName - username - age and every other necessary field
+     * - firstName - lastName - user name - age and every other necessary field
      * 
      * 2) Define a further constructor where age is defaulted to -1
      */
-
+	
     /**
      * Builds a new {@link SocialNetworkUserImpl}.
      * 
      * @param name
-     *            the user firstname
+     *            the user first name
      * @param surname
-     *            the user lastname
+     *            the user last name
      * @param userAge
      *            user's age
      * @param user
@@ -56,8 +56,13 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
         super(name, surname, user, userAge);
+        this.following = new HashMap<String, Set<U>>();
     }
 
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+    	this(name, surname, user, -1);
+    }
+    
     /*
      * [METHODS]
      * 
@@ -66,6 +71,13 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
 
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
+    	if (!this.following.containsKey(circle)) {
+    		this.following.put(circle, new HashSet<U>());
+    	}
+    	if (!this.following.containsValue(user)) {
+            this.following.get(circle).add(user);
+    		return true;
+    	}
         return false;
     }
 

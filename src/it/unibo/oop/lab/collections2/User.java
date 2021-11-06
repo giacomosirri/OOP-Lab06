@@ -11,14 +11,14 @@ public interface User {
     /**
      * Return the age of this user.
      * 
-     * @return age the age of this user
+     * @return the age of this user
      */
     int getAge();
 
     /**
-     * Returns a user's firstname.
+     * Returns a user's first name.
      * 
-     * @return the firstname of this user
+     * @return the first name of this user
      */
     String getFirstName();
 
@@ -30,9 +30,9 @@ public interface User {
     String getLastName();
 
     /**
-     * Returns a user's username.
+     * Returns a user's user name.
      * 
-     * @return the username of this user
+     * @return the user name of this user
      */
     String getUsername();
 
