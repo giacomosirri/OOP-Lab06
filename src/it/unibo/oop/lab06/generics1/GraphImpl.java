@@ -1,7 +1,6 @@
-package it.unibo.apice.oop.p11gencoll2.exercise;
+package it.unibo.oop.lab06.generics1;
 
 import java.util.*;
-import it.unibo.apice.oop.p11gencoll2.abstractions.Pair;
 
 public class GraphImpl<N> implements Graph<N> {
 
@@ -11,10 +10,11 @@ public class GraphImpl<N> implements Graph<N> {
 	public GraphImpl(final boolean direct) {
 		this.direct = direct;
 	}
-
+	
 	public void addNode(N node) {
 		if (node != null) {
-			this.adjacencyMatrix.put(node, new HashSet<>());
+			// adds the node only if it is not already present in the matrix
+			this.adjacencyMatrix.putIfAbsent(node, new HashSet<>());
 		}
 	}
 
@@ -34,32 +34,52 @@ public class GraphImpl<N> implements Graph<N> {
 	}
 
 	public Set<N> nodeSet() {
-		final var nodes = this.adjacencyMatrix.keySet();
-		return nodes;
+		return new HashSet<N>(this.adjacencyMatrix.keySet());
 	}
 
 	public Set<N> linkedNodes(N node) {
-		for (N currentNode : this.adjacencyMatrix.keySet()) {
-			if (node.equals(currentNode)) {
-				return this.adjacencyMatrix.get(currentNode);
+		Set<Map.Entry<N, Set<N>>> entries = this.adjacencyMatrix.entrySet();
+		for (final var entry : entries) {
+			if (entry.getKey().equals(node)) {
+				return new HashSet<N>(entry.getValue());
 			}
 		}
 		return null;
 	}
 	
-	private HashMap<N, Pair<Boolean, N>> bfs(N source) {
-		final var bfs = new HashMap<N, Pair<Boolean, N>>();
-		for (N node : this.adjacencyMatrix.keySet()) {
-			bfs.put(node, new Pair<Boolean, N>(false, null)); // inizializzazione dei nodi
+	private static class BfsAttributes<N> {
+		
+		private boolean reachable = false;
+		private N father = null;
+		
+		private BfsAttributes(boolean reached, N father) {
+			this.reachable = reached;
+			this.father = father;
 		}
-		bfs.replace(source, new Pair<Boolean, N>(true, null)); // inizializzazione della sorgente
+		
+		private boolean isReachable() {
+			return this.reachable;
+		}
+		
+		private N father() {
+			return this.father;
+		}
+	}
+	
+	private HashMap<N, BfsAttributes<N>> bfs(N source) {
+		final var bfs = new HashMap<N, BfsAttributes<N>>();
+		for (N node : this.adjacencyMatrix.keySet()) {
+			bfs.put(node, new BfsAttributes<N>(false, null)); 	// nodes initialization
+		}
+		bfs.replace(source, new BfsAttributes<N>(true, null)); 	// source initialization
 		Queue<N> queue = new ArrayDeque<N>();
 		queue.add(source);
-		while (queue.peek() != null) {
+		// expansion of reachable nodes
+		while (queue.peek() != null) {							
 			var currentNode = queue.poll();
 			for (N node : this.adjacencyMatrix.get(currentNode)) {
-				if (bfs.get(node).getFirst() == false) {
-					bfs.put(node, new Pair<Boolean, N>(true, currentNode));
+				if (bfs.get(node).isReachable() == false) {
+					bfs.put(node, new BfsAttributes<N>(true, currentNode));
 					queue.add(node);
 				}
 			}
@@ -71,11 +91,13 @@ public class GraphImpl<N> implements Graph<N> {
 		final var path = new LinkedList<N>();
 		var bfs = this.bfs(source);
 		var currentNode = target;
-		while (currentNode != null) {
+		// recursively backtracks until it gets to the root of the predecessor-tree
+		while (currentNode != null) {   
 			path.addFirst(currentNode);
-			currentNode = bfs.get(currentNode).getSecond();
+			currentNode = bfs.get(currentNode).father();
 		}
-		if (path.contains(source)) {
+		// if the target can be reached from source, the root of the predecessor-tree must be source
+		if (path.getFirst().equals(source)) {	
 			return path;
 		} else {
 			return null;
