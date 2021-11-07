@@ -12,8 +12,10 @@ import org.junit.Test;
  */
 public final class TestStrictBankAccount {
 
+	private static final double INITIAL_AMOUNT = 10_000.00;
 	private static final double AMOUNT_TO_WITHDRAW = 100.00;
-	
+	private static final String UNEXPECTED_EXCEPTION = "Everything should be working up until this point";
+	private static final String EXCEPTION_WAS_EXPECTED = "An exception was expected here";
     /**
      * Used to test Exceptions on {@link StrictBankAccount}.
      */
@@ -26,8 +28,8 @@ public final class TestStrictBankAccount {
          */
     	AccountHolder user1 = new AccountHolder("Marco", "Lucchi", 1);
     	AccountHolder user2 = new AccountHolder("Gennaro", "Esposito", 2);
-    	BankAccount account1 = new StrictBankAccount(1, 10_000.00, 10);
-    	BankAccount account2 = new StrictBankAccount(2, 10_000.00, 10);
+    	BankAccount account1 = new StrictBankAccount(1, INITIAL_AMOUNT, 10);
+    	BankAccount account2 = new StrictBankAccount(2, INITIAL_AMOUNT, 10);
     	
     	/*
          * 2) Effetture un numero di operazioni a piacere per verificare che le
@@ -44,36 +46,45 @@ public final class TestStrictBankAccount {
     		account2.withdrawFromATM(2, 18_000.00);
     		account1.deposit(1, 2_000.00);
     	} catch (RuntimeException e) {
-    		fail();
+    		fail(UNEXPECTED_EXCEPTION);
     	}
     	
+    	// performing 10 operations on account 2, the 11th should fail
     	for (int i = 0; i < 9; i++) {
-    		account2.depositFromATM(2, 1.50);
+    		try {
+    			account2.depositFromATM(2, 1.50);
+    		} catch (RuntimeException e) {
+    			fail(UNEXPECTED_EXCEPTION);
+    		}
     	}
-    	// trying the 11th operation on account 2, should fail
     	try {
     		account2.withdrawFromATM(2, 150.50);
-    		fail();
+    		fail(EXCEPTION_WAS_EXPECTED);
     	} catch (TransactionsOverQuotaException e) {
     		assertNotNull(e.getMessage());
     		System.out.println(e.getMessage());
     	}
+    	
     	// check wrong account ID
     	try {
     		account1.withdraw(3, 15_000.00);
-    		fail();
+    		fail(EXCEPTION_WAS_EXPECTED);
     	} catch (WrongAccountHolderException e){
     		assertNotNull(e.getMessage());
     		System.out.println(e.getMessage());
     	}
-    	// withdraw 500.00 until account 1 has no money left
+    	
+    	// withdraw until account 1 has no money left, then it won't be possible to withdraw anymore
     	while (account1.getBalance() > AMOUNT_TO_WITHDRAW) {
-    		account1.withdraw(1, AMOUNT_TO_WITHDRAW);
+    		try {
+    			account1.withdraw(1, AMOUNT_TO_WITHDRAW);
+    		} catch (RuntimeException e) {
+    			fail(UNEXPECTED_EXCEPTION);
+    		}
     	}
-    	// in account 1 there is too little money left, so it is not possible to withdraw anymore
     	try {
     		account1.withdraw(1, AMOUNT_TO_WITHDRAW);
-    		fail();
+    		fail(EXCEPTION_WAS_EXPECTED);
     	} catch (NotEnoughFoundsException e) {
     		assertNotNull(e.getMessage());
     		System.out.println(e.getMessage());
