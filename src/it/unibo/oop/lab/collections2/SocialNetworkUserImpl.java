@@ -75,37 +75,28 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
     		this.followedMap.put(circle, new HashSet<U>());
     	}
     	// add the person only if he/she is not already followed
-    	if (!this.followedMap.get(circle).contains(user)) {
-            this.followedMap.get(circle).add(user);
-    		return true;
-    	}
-        return false;
+    	return this.followedMap.get(circle).add(user);
     }
 
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-    	var coll = new HashSet<U>();
+    	final var usersInGroup = new HashSet<U>();
     	if (this.followedMap.containsKey(groupName)) {
-    		coll.addAll(this.followedMap.get(groupName));
+    		usersInGroup.addAll(this.followedMap.get(groupName));
         }
-        return coll;
+        return usersInGroup;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        var list = new LinkedList<U>();
-        var groups = this.followedMap.entrySet();
-        var iterator = groups.iterator();
+        final var allUsers = new LinkedList<U>();
+        final var groups = this.followedMap.entrySet();
+        final var iterator = groups.iterator();
         while (iterator.hasNext()) {
-        	var currentGroup = iterator.next().getValue();
-        	for (var currentGroupUser : currentGroup) {
-            	// every person must only be counted once, even if he/she is in multiple groups
-        		if (!list.contains(currentGroupUser)) {
-        			list.add(currentGroupUser);
-        		}
-        	}
+        	// assuming every person can be in only one group of friends (or there might be duplicates)
+        	allUsers.addAll(iterator.next().getValue());  
         }
-        return list;
+        return allUsers;
     }
 
 }
