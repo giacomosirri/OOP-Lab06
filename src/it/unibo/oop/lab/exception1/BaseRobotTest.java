@@ -14,6 +14,11 @@ import org.junit.Test;
  */
 public final class BaseRobotTest {
 
+	private static final String POSITION_FAIL = "Something went wrong: "
+			+ "robot position should be fine here :(";
+	private static final String BATTERY_FAIL = "Something went wrong: "
+			+ "battery should have no problems here :(";
+	
     /**
      * Simple test for testing a robot moving, wandering the available
      * environment.
@@ -42,15 +47,18 @@ public final class BaseRobotTest {
             try { 
             	r1.moveRight();
             } catch (PositionOutOfBoundException e) {
-            	fail();
+            	fail(POSITION_FAIL);
             }
         }
         // reached the right limit of the world: cannot move right
         try {
         	r1.moveRight();
-        	fail();
+        	fail("An exception over robot position is expected here :/");
         } catch (PositionOutOfBoundException e) {
         	assertNotNull(e.getMessage());
+        	System.out.println(e.getMessage());
+        } catch (NotEnoughBatteryException e) {
+        	fail(BATTERY_FAIL);
         }
         // checking positions x=50; y=0
         assertEquals("[MOVING RIGHT ROBOT POS X]", RobotEnvironment.WORLD_X_UPPER_LIMIT, r1.getEnvironment().getCurrPosX());
@@ -64,15 +72,18 @@ public final class BaseRobotTest {
             try { 
             	r1.moveUp();
             } catch (PositionOutOfBoundException e) {
-            	fail();
+            	fail(POSITION_FAIL);
             }
         }
         // reached the upper limit of the world: cannot move up
         try {
         	r1.moveUp();
-        	fail();
+        	fail("An exception over robot position is expected here :/");
         } catch (PositionOutOfBoundException e) {
         	assertNotNull(e.getMessage());
+        	System.out.println(e.getMessage());
+        } catch (NotEnoughBatteryException e) {
+        	fail(BATTERY_FAIL);
         }
         // checking positions x=50; y=80
         assertEquals("[MOVING RIGHT ROBOT POS X]", RobotEnvironment.WORLD_X_UPPER_LIMIT, r1.getEnvironment().getCurrPosX());
@@ -92,8 +103,12 @@ public final class BaseRobotTest {
          * exhausted.
          */
         while (r2.getBatteryLevel() > 0) {
-            r2.moveUp();
-            r2.moveDown();
+            try {
+            	r2.moveUp();
+            	r2.moveDown();
+            } catch (NotEnoughBatteryException e) {
+            	fail(BATTERY_FAIL);
+            }
         }
         // verify battery level: not enough battery to move in any direction
         try {
@@ -101,21 +116,13 @@ public final class BaseRobotTest {
         	r2.moveDown();
         	r2.moveRight();
         	r2.moveLeft();
-        	fail();
+        	fail("An exception over battery level is expected here :/");
         } catch (NotEnoughBatteryException e) {
-        	assertNotNull(e.getMessage());
-        }
-        // verify position: same as start position
-        assertEquals("[CHECKING ROBOT INIT POS Y]", 0, r2.getEnvironment().getCurrPosY());
-       
-        // out of world: cannot move up
-        try {
-        	r2.moveUp();
-        	fail();
-        } catch  (PositionOutOfBoundException | NotEnoughBatteryException e) {
         	assertNotNull(e.getMessage());
         	System.out.println(e.getMessage());
         }
+        // verify position: same as start position
+        assertEquals("[CHECKING ROBOT INIT POS Y]", 0, r2.getEnvironment().getCurrPosY());
         
         // re-charge battery
         r2.recharge();

@@ -35,7 +35,7 @@ public class Robot {
      * @return If the Up movement has been performed
      */
     public void moveUp() {
-        moveToPosition(this.environment.getCurrPosX(), 
+        this.moveToPosition(this.environment.getCurrPosX(), 
         		this.environment.getCurrPosY() + Robot.MOVEMENT_DELTA);
 
     }
@@ -88,17 +88,10 @@ public class Robot {
      * @return true if robot gets moved, false otherwise
      */
     private void moveToPosition(final int newX, final int newY) {
-    	try { 
-    		this.isBatteryEnoughToMove();
-    		this.environment.move(newX, newY);
-    		this.consumeBatteryForMovement();
-    		this.log("Moved to position(" + newX + "," + newY + ").");
-    	} catch (NotEnoughBatteryException e) {
-    		throw e;
-    	}
-    	catch (PositionOutOfBoundException e) {
-    		throw e;
-    	}
+    	this.isBatteryEnoughToMove();
+    	this.environment.move(newX, newY);
+    	this.consumeBatteryForMovement();
+    	this.log("Moved to position(" + newX + "," + newY + ").");
     }
 
     /**
