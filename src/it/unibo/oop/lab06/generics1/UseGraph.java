@@ -5,6 +5,9 @@ package it.unibo.oop.lab06.generics1;
  */
 public final class UseGraph {
 
+	static final boolean DIRECT_GRAPH = true;
+	static final boolean INDIRECT_GRAPH = false;
+	
     private UseGraph() {
     }
 
@@ -13,7 +16,7 @@ public final class UseGraph {
      *            ignored
      */
     public static void main(final String... args) {
-        final Graph<String> g = new GraphImpl<>(true); // new GraphImpl<>();
+        final Graph<String> g = new GraphImpl<>(DIRECT_GRAPH);
         g.addNode("a");
         g.addNode("b");
         g.addNode("c");

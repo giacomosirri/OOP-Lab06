@@ -5,28 +5,33 @@ import java.util.*;
 public class GraphImpl<N> implements Graph<N> {
 
 	private final Map<N, Set<N>> adjacencyMatrix = new HashMap<>();
-	private boolean direct = false;
-	
-	public GraphImpl() {
-	}
-	
+	private final boolean direct;
+
 	public GraphImpl(final boolean direct) {
 		this.direct = direct;
 	}
 	
 	public void addNode(N node) {
 		if (node != null) {
-			// adds the node only if it is not already present in the matrix
+			// add the node only if it is not already present in the matrix
 			this.adjacencyMatrix.putIfAbsent(node, new HashSet<>());
 		}
 	}
 
+	private boolean nodeExists(N node) {
+		return this.adjacencyMatrix.keySet().contains(node);
+	}
+	
 	public void addEdge(N source, N target) {
-		if (source != null & target != null) {
+		// add the edge only if both nodes have already been added to the graph
+		if (nodeExists(source) && nodeExists(target)) {
 			this.adjacencyMatrix.get(source).add(target);
-			if (this.direct == false) {
+			// an indirect graph also has an edge from *target* to *source* 
+			if (this.direct == UseGraph.INDIRECT_GRAPH) {
 				this.adjacencyMatrix.get(target).add(source);
 			}
+		} else {
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -35,13 +40,11 @@ public class GraphImpl<N> implements Graph<N> {
 	}
 
 	public Set<N> linkedNodes(N node) {
-		Set<Map.Entry<N, Set<N>>> entries = this.adjacencyMatrix.entrySet();
-		for (final var entry : entries) {
-			if (entry.getKey().equals(node)) {
-				return new HashSet<N>(entry.getValue());
-			}
+		if (nodeExists(node)) {
+			return new HashSet<N>(this.adjacencyMatrix.get(node));
+		} else {
+			throw new IllegalArgumentException();
 		}
-		return null;
 	}
 	
 	private static class BfsAttributes<N> {
@@ -73,7 +76,7 @@ public class GraphImpl<N> implements Graph<N> {
 		queue.add(source);
 		// expansion of reachable nodes
 		while (queue.peek() != null) {							
-			var currentNode = queue.poll();
+			final var currentNode = queue.poll();
 			for (N node : this.adjacencyMatrix.get(currentNode)) {
 				if (bfs.get(node).isReachable() == false) {
 					bfs.put(node, new BfsAttributes<N>(true, currentNode));
@@ -85,19 +88,24 @@ public class GraphImpl<N> implements Graph<N> {
 	}
 	
 	public List<N> getPath(N source, N target) {
-		final var path = new LinkedList<N>();
-		var bfs = this.bfs(source);
-		var currentNode = target;
-		// recursively backtracks until it gets to the root of the predecessor-tree
-		while (currentNode != null) {   
-			path.addFirst(currentNode);
-			currentNode = bfs.get(currentNode).father();
-		}
-		// if the target can be reached from source, the root of the predecessor-tree must be source
-		if (path.getFirst().equals(source)) {	
-			return path;
+		// it makes sense to find a path only if both *source* and *target* are in the graph
+		if (nodeExists(source) && nodeExists(target)) {
+			final var path = new LinkedList<N>();
+			final var bfs = this.bfs(source);
+			var currentNode = target;
+			// recursively backtracks until it gets to the root of the predecessor-tree
+			while (currentNode != null) {   
+				path.addFirst(currentNode);
+				currentNode = bfs.get(currentNode).father();
+			}
+			// if *target* can be reached from *source*, the root of the predecessor-tree must be *source*
+			if (path.getFirst().equals(source)) {	
+				return path;
+			} else {
+				return null;
+			}
 		} else {
-			return null;
+			throw new IllegalArgumentException();
 		}
 	}
 }
