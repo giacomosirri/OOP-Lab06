@@ -13,7 +13,6 @@ import java.util.List;
 public final class UseCollection {
 
     private static final int TO_MS = 1_000_000;
-    private static final int FIRST_INDEX = 0;
     private static final int ADD_CONST = 100_000;
     private static final int READ_CONST = 1_000;
     
@@ -47,15 +46,16 @@ public final class UseCollection {
          * (Suggestion: use a temporary variable)
          */
     	final var temp = arrayList.get(lastIndex(arrayList));
-    	arrayList.set(lastIndex(arrayList), arrayList.get(FIRST_INDEX));
-    	arrayList.set(FIRST_INDEX, temp);
+    	arrayList.set(lastIndex(arrayList), arrayList.get(0));
+    	arrayList.set(0, temp);
     	
         /*
          * 4) Using a single for-each, print the contents of the arraylist.
          */
     	for (final Integer i : arrayList) {
-    		System.out.println(i);
+    		System.out.print(i + ",");
     	}
+    	System.out.println();
     	
         /*
          * 5) Measure the performance of inserting new elements in the head of
